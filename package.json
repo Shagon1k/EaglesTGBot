@@ -1,0 +1,14 @@
+{
+    "name": "eagles-tg-bot",
+    "version": "1.0.0",
+    "description": "Eagles Telegram bot.",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js"
+    },
+    "author": "Aliaksei Hurynovich",
+    "license": "ISC",
+    "dependencies": {
+        "node-telegram-bot-api": "^0.59.0"
+    }
+}
