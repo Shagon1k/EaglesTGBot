@@ -2,7 +2,7 @@ const TelegramBot = require('node-telegram-bot-api');
 
 const CHECK_ANSWERS = ['да 👍', 'нет 👎', 'похуй 😐︎', 'сериал.. 📺', 'Топор подскажет! 🪓', 'белое ⚪', 'серое 🧙‍♂️', 'чёрное ⚫'];
 const RANDOM_ANSWERS = ['Факт! 👆'];
-const RANDOM_ANSWER_CHANCE = 0.1;
+const RANDOM_ANSWER_CHANCE = 0.02;
 
 const token = process.env.BOT_TOKEN;
 
