@@ -14,7 +14,7 @@ const CHECK_ANSWERS = [
 const RANDOM_ANSWERS = ["Факт! 👆", "Гигигага 😂"];
 const NU_CHTO_TAM_ANSWER = "Ну что там? 🧝";
 
-const RANDOM_ANSWER_CHANCE = 0.04;
+const RANDOM_ANSWER_CHANCE = 0.025;
 const GAY_ANSWER_CHANCE = 0.3;
 
 const GAY_REGEXP = /гей/i;
