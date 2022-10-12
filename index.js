@@ -12,17 +12,29 @@ const CHECK_ANSWERS = [
   "чёрное ⚫",
 ];
 const RANDOM_ANSWERS = ["Факт! 👆", "Гигигага 😂"];
+const NU_CHTO_TAM_ANSWER = "Ну что там? 🧝";
+
 const RANDOM_ANSWER_CHANCE = 0.04;
 const GAY_ANSWER_CHANCE = 0.3;
 
 const GAY_REGEXP = /гей/i;
 const INESSA_REGEXP = /инесса/i;
 const MATH_EXPRESSION_REGEXP = /([\d\(\)]+).+([\d\(\)]+)/;
+const THREE_X_CUBE_REGEXP = /3\*?[xх]\^3\+C/i;
 
 const token = process.env.BOT_TOKEN;
 
+const handleInessaElf = (bot, chatId, msgId) => {
+  bot.sendMessage(chatId, NU_CHTO_TAM_ANSWER, {
+    reply_to_message_id: msgId,
+  });
+};
+
 const handleInessaMath = (bot, chatId, msgId, msgText) => {
-  const mathExpression = msgText.match(MATH_EXPRESSION_REGEXP)[0];
+  const mathExpression = msgText?.match(MATH_EXPRESSION_REGEXP)?.[0];
+  if (!mathExpression) {
+    return;
+  }
   const mathResult = stringMath(mathExpression);
 
   if (mathResult !== null) {
@@ -37,6 +49,18 @@ const handleGayRequest = (bot, chatId, msgId) => {
 
   if (shouldGayAnswer) {
     bot.sendMessage(chatId, "Естественно! 👆", {
+      reply_to_message_id: msgId,
+    });
+  }
+};
+
+const handleRandomAnswer = (bot, chatId, msgId) => {
+  const shouldDefaultAnswer = Math.random() <= RANDOM_ANSWER_CHANCE;
+  if (shouldDefaultAnswer) {
+    const answer =
+      RANDOM_ANSWERS[Math.floor(Math.random() * RANDOM_ANSWERS.length)];
+
+    bot.sendMessage(chatId, answer, {
       reply_to_message_id: msgId,
     });
   }
@@ -59,26 +83,27 @@ const runBot = () => {
 
   eaglesBot.on("message", (msg) => {
     const chatId = msg.chat.id;
-    const { id: msgId, text: msgText } = msg;
+    const { message_id: msgId, text: msgText } = msg;
 
-    switch (typeof msgText === 'string') {
+    if (typeof msgText !== "string") {
+      return;
+    }
+
+    switch (true) {
+      case THREE_X_CUBE_REGEXP.test(msgText):
+        handleInessaElf(eaglesBot, chatId, msgId);
+        break;
       case INESSA_REGEXP.test(msgText):
         handleInessaMath(eaglesBot, chatId, msgId, msgText);
         break;
       case GAY_REGEXP.test(msgText):
         handleGayRequest(eaglesBot, chatId, msgId);
         break;
+      case true:
+        handleRandomAnswer(eaglesBot, chatId, msgId);
+        break;
       default:
         return;
-    }
-
-    const shouldDefaultAnswer = Math.random() <= RANDOM_ANSWER_CHANCE;
-
-    if (shouldDefaultAnswer) {
-      const answer =
-        RANDOM_ANSWERS[Math.floor(Math.random() * RANDOM_ANSWERS.length)];
-
-      eaglesBot.sendMessage(chatId, answer);
     }
   });
 };
